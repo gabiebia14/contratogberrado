@@ -87,7 +87,7 @@ export const useOCR = () => {
       
       const timestamp = Date.now();
       const sanitizedFileName = sanitizeFileName(file.name);
-      const finalFileName = `${timestamp}_${sanitizedFileName}`;
+      const finalFileName = `${session.user.id}/${timestamp}_${sanitizedFileName}`;
       
       // Convert file to base64
       const base64 = await new Promise((resolve, reject) => {
