@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, Download, Search } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';  // Ensure this import is correct
+import { supabase } from '@/lib/supabase';
 
 const ContractsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');

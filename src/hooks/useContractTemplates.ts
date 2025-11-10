@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/lib/supabase';
 import { Template } from '@/types/contracts';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';

@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/lib/supabase';
 import { ExtractedField, DocumentRole, DocumentType, MaritalStatus } from '@/types/ocr';
 import { toast } from 'sonner';
 
