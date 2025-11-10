@@ -28,9 +28,15 @@ export const useContractTemplates = () => {
   const addTemplate = async (name: string, content: string, category: string) => {
     setLoading(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error('Você precisa estar logado para adicionar modelos');
+        throw new Error('No session');
+      }
+
       const { error } = await supabase
         .from('contract_templates')
-        .insert([{ name, content, category }]);
+        .insert([{ name, content, category, user_id: session.user.id }]);
 
       if (error) throw error;
 
