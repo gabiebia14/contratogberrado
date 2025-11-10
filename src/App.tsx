@@ -20,9 +20,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={<Navigate to="/juridico" replace />} />
           <Route path="/dashboard-selection" element={<DashboardSelection />} />
-          <Route path="/auth" element={<Auth />} />
+          {/* <Route path="/auth" element={<Auth />} /> */}
           
           {/* Juridical Dashboard */}
           <Route path="/juridico" element={<DashboardLayout />}>
