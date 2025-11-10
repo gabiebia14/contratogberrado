@@ -9,19 +9,28 @@ const ContractsPage = () => {
 
   useEffect(() => {
     const fetchContracts = async () => {
-      const { data, error } = await supabase.from('contracts').select('*');
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        console.error('No session found');
+        return;
+      }
+      
+      const { data, error } = await supabase
+        .from('contracts')
+        .select('*')
+        .eq('user_id', session.user.id);
+        
       if (error) {
         console.error('Error fetching contracts:', error);
       } else {
-        setContracts(data);
+        setContracts(data || []);
       }
     };
     fetchContracts();
   }, []);
 
   const filteredContracts = contracts.filter(contract => {
-    const matchesSearch = contract.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         contract.client.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = contract.title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'todos' || contract.status.toLowerCase() === statusFilter.toLowerCase();
     return matchesSearch && matchesStatus;
   });
@@ -61,9 +70,8 @@ const ContractsPage = () => {
           <table className="w-full">
             <thead className="text-left text-gray-500 text-sm">
               <tr>
-                <th className="pb-4">Nome</th>
-                <th className="pb-4">Cliente</th>
-                <th className="pb-4">Data</th>
+                <th className="pb-4">Título</th>
+                <th className="pb-4">Data de Criação</th>
                 <th className="pb-4">Status</th>
                 <th className="pb-4">Ações</th>
               </tr>
@@ -76,18 +84,17 @@ const ContractsPage = () => {
                       <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
                         <FileText className="text-indigo-600" size={16} />
                       </div>
-                      {contract.name}
+                      {contract.title}
                     </div>
                   </td>
-                  <td className="py-4">{contract.client}</td>
-                  <td className="py-4">{contract.date}</td>
+                  <td className="py-4">{new Date(contract.created_at).toLocaleDateString('pt-BR')}</td>
                   <td className="py-4">
                     <span className={`px-2 py-1 rounded-full text-sm ${
-                      contract.status === 'Ativo' ? 'bg-green-100 text-green-600' :
-                      contract.status === 'Pendente' ? 'bg-yellow-100 text-yellow-600' :
+                      contract.status === 'active' ? 'bg-green-100 text-green-600' :
+                      contract.status === 'draft' ? 'bg-yellow-100 text-yellow-600' :
                       'bg-gray-100 text-gray-600'
                     }`}>
-                      {contract.status}
+                      {contract.status === 'active' ? 'Ativo' : contract.status === 'draft' ? 'Rascunho' : contract.status}
                     </span>
                   </td>
                   <td className="py-4">
