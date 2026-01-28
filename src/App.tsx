@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -9,7 +8,7 @@ import NotFound from '@/pages/NotFound';
 import Auth from '@/pages/Auth';
 import ContractsPage from '@/components/ContractsPage';
 import ContractTemplates from '@/pages/ContractTemplates';
-import NewContract from '@/pages/NewContract';
+import GenerateContract from '@/pages/GenerateContract';
 import Documents from '@/pages/Documents';
 import Dashboard from '@/pages/Index';
 import ProprietarioDashboard from '@/pages/ProprietarioDashboard';
@@ -33,7 +32,7 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="contracts" element={<ContractsPage />} />
             <Route path="templates" element={<ContractTemplates />} />
-            <Route path="new-contract" element={<NewContract />} />
+            <Route path="new-contract" element={<GenerateContract />} />
             <Route path="documentos" element={<Documents />} />
           </Route>
 
