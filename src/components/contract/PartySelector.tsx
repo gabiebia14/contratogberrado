@@ -41,7 +41,16 @@ export default function PartySelector({ documents, parties, onPartiesChange }: P
     const data = typeof doc.extracted_data === 'string' 
       ? JSON.parse(doc.extracted_data) 
       : doc.extracted_data;
-    return data.nome_completo || data.nome || doc.file_name;
+    
+    // Check non-prefixed fields first
+    if (data.nome_completo) return data.nome_completo;
+    if (data.nome) return data.nome;
+    
+    // Look for prefixed name fields (e.g., locatario_nome, locador_nome)
+    const nameKey = Object.keys(data).find(key => key.endsWith('_nome') && data[key]);
+    if (nameKey) return data[nameKey];
+    
+    return doc.file_name;
   };
 
   const addParty = () => {
