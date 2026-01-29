@@ -42,16 +42,13 @@ const Auth = () => {
         password,
       });
       
-if (error) {
+      if (error) {
         toast.error(error.message || 'Erro ao fazer login');
         return;
-}
+      }
 
-          // Login successful - redirect to juridico dashboard
-          navigate('/juridico');
-                  }
-      
-
+      // Login successful - redirect to juridico dashboard
+      navigate('/juridico');
     } catch (error: any) {
       toast.error(error.message);
     } finally {
