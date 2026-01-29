@@ -42,31 +42,14 @@ const Auth = () => {
         password,
       });
       
-if (error) throw error;
-
-          // Successful login - determine which dashboard to redirect to
-          const { data: { user } } = await supabase.auth.getUser();
-
-          if (user) {
-                  // Determine path based on user role (default to juridico)
-                  const currentPath = location.pathname;
-                  if (currentPath.includes('proprieterio')) {
-                            navigate('/proprietario');
-                  } else if (currentPath.includes('admin')) {
-                            navigate('/admin');
-                  } else {
-                            navigate('/juridico');
-                  }
-          }
-                  }
-                  }
-                  }
-          }
-        } else {
-          throw error;
-        }
+if (error) {
+        toast.error(error.message || 'Erro ao fazer login');
         return;
-      }
+}
+
+          // Login successful - redirect to juridico dashboard
+          navigate('/juridico');
+                  }
       
 
     } catch (error: any) {
