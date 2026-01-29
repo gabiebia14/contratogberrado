@@ -42,17 +42,25 @@ const Auth = () => {
         password,
       });
       
-      if (error) {
-        if (error.message.includes('Email not confirmed')) {
-          toast.error('Email não confirmado. Por favor, verifique sua caixa de entrada e confirme seu email.');
-          
-          const { error: resendError } = await supabase.auth.resend({
-            type: 'signup',
-            email,
-          });
-          
-          if (!resendError) {
-            toast.info('Um novo email de confirmação foi enviado.');
+if (error) throw error;
+
+          // Successful login - determine which dashboard to redirect to
+          const { data: { user } } = await supabase.auth.getUser();
+
+          if (user) {
+                  // Determine path based on user role (default to juridico)
+                  const currentPath = location.pathname;
+                  if (currentPath.includes('proprieterio')) {
+                            navigate('/proprietario');
+                  } else if (currentPath.includes('admin')) {
+                            navigate('/admin');
+                  } else {
+                            navigate('/juridico');
+                  }
+          }
+                  }
+                  }
+                  }
           }
         } else {
           throw error;
@@ -60,18 +68,7 @@ const Auth = () => {
         return;
       }
       
-      // Determine which dashboard to redirect to based on the previous path
-      const path = location.pathname;
-      if (path.includes('juridico')) {
-        navigate('/juridico');
-      } else if (path.includes('proprietario')) {
-        navigate('/proprietario');
-      } else if (path.includes('admin')) {
-        navigate('/admin');
-      } else {
-        // Default to juridico if no specific path
-        navigate('/juridico');
-      }
+
     } catch (error: any) {
       toast.error(error.message);
     } finally {
