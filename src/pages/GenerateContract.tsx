@@ -37,6 +37,18 @@ export default function GenerateContract() {
 
   const selectedTemplate = templates.find(t => t.id === selectedTemplateId);
 
+  // Helper to extract name from document data (handles prefixed and non-prefixed fields)
+  const getNameFromExtractedData = (data: Record<string, string>): string | null => {
+    if (data.nome_completo) return data.nome_completo;
+    if (data.nome) return data.nome;
+    
+    // Look for prefixed name fields (e.g., locatario_nome, locador_nome)
+    const nameKey = Object.keys(data).find(key => key.endsWith('_nome') && data[key]);
+    if (nameKey) return data[nameKey];
+    
+    return null;
+  };
+
   // Filter documents with valid extracted data
   const validDocuments = processedDocuments.filter((doc) => {
     if (!doc.extracted_data) return false;
@@ -44,7 +56,7 @@ export default function GenerateContract() {
       const data = typeof doc.extracted_data === 'string' 
         ? JSON.parse(doc.extracted_data) 
         : doc.extracted_data;
-      return data.nome_completo || data.nome;
+      return getNameFromExtractedData(data) !== null;
     } catch {
       return false;
     }
